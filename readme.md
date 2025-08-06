@@ -15,20 +15,20 @@ Dataset: [Alibaba Cluster Trace v2018](https://github.com/alibaba/clusterdata/bl
 ### 📦 Data Preprocessing
 The project extracts  a sample of the `batch_instance.tar.gz` file to simulate a scalable big data environment:
 
-```python
-import tarfile
+```
+    import tarfile
 
-with tarfile.open('batch_instance.tar.gz', 'r:gz') as tar:
-    members = tar.getmembers()
-    tar.extractall(path='extracted_batch_instance', members=members[:int(len(members) * 0.2)])
+    with tarfile.open('batch_instance.tar.gz', 'r:gz') as tar:
+        members = tar.getmembers()
+        tar.extractall(path='extracted_batch_instance', members=members[:int(len(members) * 0.2)])
 
-Then it loads and cleans the dataset with assigned schema:
+    Then it loads and cleans the dataset with assigned schema:
 
-```python 
-columns = ["instance_name", "task_name", "job_name", "task_type", "status", "start_time", "end_time",
-           "machine_id", "seq_no", "total_seq_no", "cpu_avg", "cpu_max", "mem_avg", "mem_max"]
-df = pd.read_csv("extracted_batch_instance/batch_instance.csv", names=columns)
-df["duration"] = df["end_time"].astype(int) - df["start_time"].astype(int)
+```
+    columns = ["instance_name", "task_name", "job_name", "task_type", "status", "start_time", "end_time",
+            "machine_id", "seq_no", "total_seq_no", "cpu_avg", "cpu_max", "mem_avg", "mem_max"]
+    df = pd.read_csv("extracted_batch_instance/batch_instance.csv", names=columns)
+    df["duration"] = df["end_time"].astype(int) - df["start_time"].astype(int)
 df = df[df['duration'] >= 0]
 
 ## 📈 Visualization with Plotly
